@@ -1,0 +1,51 @@
+services:
+  docuchat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: docuchat:local
+    ports:
+      - "8000:8000"
+    environment:
+      DOCUCHAT_ENV: production
+      CHROMA_DIR: /app/data/chroma
+      DOCUMENTS_DIR: /app/documents
+      AUTO_INGEST: ${AUTO_INGEST:-true}
+      COLLECTION_NAME: ${COLLECTION_NAME:-docuchat}
+      EMBEDDING_DIMENSIONS: ${EMBEDDING_DIMENSIONS:-384}
+      CHUNK_SIZE: ${CHUNK_SIZE:-800}
+      CHUNK_OVERLAP: ${CHUNK_OVERLAP:-120}
+      RETRIEVAL_K: ${RETRIEVAL_K:-4}
+      MAX_UPLOAD_MB: ${MAX_UPLOAD_MB:-20}
+      LLM_PROVIDER: ${LLM_PROVIDER:-groq}
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OLLAMA_API_KEY: ${OLLAMA_API_KEY:-}
+      LLM_API_KEY: ${LLM_API_KEY:-}
+      LLM_BASE_URL: ${LLM_BASE_URL:-}
+      LLM_MODEL: ${LLM_MODEL:-}
+      LLM_TIMEOUT_SECONDS: ${LLM_TIMEOUT_SECONDS:-60}
+      CRITIC_MAX_REVISIONS: ${CRITIC_MAX_REVISIONS:-1}
+    volumes:
+      - chroma_data:/app/data
+      - ./documents:/app/documents:ro
+    extra_hosts:
+      # Lets an Ollama server on the Linux host be reached from the container.
+      - "host.docker.internal:host-gateway"
+    init: true
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3)",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+volumes:
+  chroma_data:

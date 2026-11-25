@@ -1,0 +1,27 @@
+# DocuChat dependencies.
+#
+# Pinned for reproducible builds and verified on Python 3.10.
+# LangChain 1.x requires Python >= 3.11, so this project intentionally pins the
+# maintained 0.3.x line that still supports python:3.10-slim.
+fastapi==0.161.1
+# Pinned because FastAPI permits any Starlette >=0.46; Starlette 1.x renamed
+# the 422 status constant used below.
+starlette==1.7.0
+# Required by FastAPI to parse multipart/form-data for POST /ingest.
+python-multipart==0.0.32
+uvicorn[standard]==0.54.0
+langchain==0.3.30
+langchain-community==0.3.31
+langchain-text-splitters==0.3.11
+# ChatOpenAI is the single LangChain adapter used for Groq, Ollama, and OpenAI;
+# all three expose an OpenAI-compatible chat-completions endpoint.
+langchain-openai==0.3.35
+chromadb==1.5.9
+pypdf==7.1.1
+
+# Used by FastAPI's TestClient and available for provider contract tests.
+httpx==0.28.1
+
+# Test tooling. Kept in the image so `docker run ... pytest` works without a
+# second image; split into requirements-dev.txt if you prefer a slimmer runtime.
+pytest==9.2.0
