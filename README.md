@@ -288,12 +288,6 @@ docuchat/
   prompt-injection filtering. Put the API behind an API gateway (OAuth2/JWT),
   partition collections per tenant, and treat retrieved text as untrusted input
   before using this in a real enterprise deployment.
-- **AI-assisted development.** I leveraged AI coding agents to accelerate the
-  initial scaffolding (FastAPI boilerplate, Dockerfile setup, and pytest
-  fixtures), then focused my time on the multi-agent orchestration logic and
-  ensuring the CI pipeline was robust. The lesson: use AI to move faster on
-  boilerplate, but keep architecture, verification behaviour, and deployment
-  quality under deliberate human control.
 
 ## Continuous integration
 
